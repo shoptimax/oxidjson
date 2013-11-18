@@ -17,6 +17,7 @@ Copy "app/", "modules/", "oxrest/" and the other files to your shop root directo
 Activate the module in the shop backend. The module only adds two new groups to the oxgroups table ("oxjsonro" and "oxjsonfull").
 Assign shop users to the new groups as required so they can login via the interface.
 
+[Get Composer](http://getcomposer.org/), copy composer.phar to your shop directory.
 In the root directory of the shop, execute
 `INSTALL-TONIC.sh`
 after changing the php executable path in it.
