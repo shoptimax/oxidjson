@@ -1,0 +1,6 @@
+{
+    "require": {
+        "peej/tonic": "dev-master"
+    }
+}
+

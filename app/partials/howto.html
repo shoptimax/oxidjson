@@ -1,0 +1,245 @@
+<div>
+    <ul class="breadcrumb">
+        <li>
+            <a href="#">Home</a> <span class="divider">/</span>
+        </li>
+        <li>
+            <a href="#">Howto</a>
+        </li>
+    </ul>
+</div>
+
+
+<section id="accordion">
+    <div class="page-header">
+        <h1>Howto</h1>
+    </div>
+    <div class="row">
+        <div class="span9">
+            <div>
+                <label class="checkbox">
+                    <input type="checkbox" ng-model="oneAtATime">
+                    Open only one at a time
+                </label>
+
+                <accordion close-others="oneAtATime">
+                    <accordion-group>
+                        <accordion-heading>
+                            Requirements
+                        </accordion-heading>
+                        <p>PHP >= 5.3 required. You need an installed OXID eShop and an admin account for login. The OXID module
+                        also creates two new user groups "OXJSON Full" and "OXJSON Read-only", so you can assign
+                        users to these groups which then can use the JSON interface with full (CRUD with POST, PUT, DELETE) access or read-only access (only GET allowed).</p>
+                    </accordion-group>
+                    <accordion-group>
+                        <accordion-heading>
+                            Installation
+                        </accordion-heading>
+                        <p>Copy "app/", "oxrest/" and the other files to your shop root directory.</p>
+                        
+                        <p>In the root directory of the shop, execute
+                        <code>`INSTALL-TONIC.sh`</code>
+                        after changing the php executable path in it.</p>
+
+                        <p>This will execute composer.phar with it's configuration file composer.json.
+
+                        Composer will then create a "vendor" subdirectory, where it installs TONIC.</p>
+
+                        <p>The autoloader created in that vendor directory will then be used by the
+                        "/oxrest/oxrest.php" file.</p>
+
+                        <div>
+                        In your OXID shop's main .htaccess file, add this:
+                            <code>
+                                <pre>
+                        # Map authorization if you use CGI-PHP
+                        RewriteCond %{HTTP:Authorization} ^(.*)
+                        RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
+                        
+                        # Rewrite rule for the JSON interface
+                        RewriteCond %{REQUEST_URI} .*oxrest.*
+                        RewriteCond %{REQUEST_URI} !oxrest\.php$
+                        RewriteCond %{REQUEST_FILENAME} !-f
+                        RewriteRule .* oxrest/oxrest.php [L,QSA]
+                        </pre>
+                        </code>
+                            
+                        before the line
+                        <code>
+                        RewriteCond %{REQUEST_URI} oxseo\.php$                       
+                        </code>
+                        </div>
+                        
+                    </accordion-group>
+                    <accordion-group heading="Using the AngularJS demo client">
+                        <p>To use the client you need a login for the shop. You can use this AngularJS client to test the JSON interface
+                            and select OXID objects or lists. It is possible to select either <code>oxList</code> based lists (or any other
+                            database table, see below) in the <a href="#/list">Listview</a> or to load specific objects with the <a href="#/inspector">Inspector</a>.
+                            One click on the "Details" button in the list view also takes you to the object's details in the "Inspector".
+                        </p>
+                        <p>All the fields can be <strong>edited "inline"</strong>, the data can be saved back to the database. In the "Inspector" view, you can modifiy
+                        objects via JSON and save, delete or create new entries.</p>
+                        <p>The corresponding URI for each action is shown dynamically on the page, so you can have a look how to customize calls to the 
+                        REST / JSON interface.</p>
+                        
+                        <!--
+                        <p>Zur Benutzung des Clients ist ein Account im Shop n&ouml;tig.
+                        Dieser <code>AngularJS</code> Demo-Client kann verwendet werden, um die JSON-Schnittstelle zu testen und
+                        OXID Objekte oder -Listen zu selektieren. Es ist m&ouml;glich, sich die auf <code>oxList</code> basierenden
+                        Listen (oder jede beliebige andere Datenbank-Tabelle, s.u.) unter <a href="#/list">Listview</a> ausgeben zu lassen oder sich unter <a href="#/inspector">Inspector</a>
+                        einzelne Objekte zu laden. Ein Klick auf den Button <strong>"Details"</strong> einer Zeile im Listview f&uuml;hrt ebenfalls zu den Objekt-Details
+                        im "Inspektor".</p>
+                        <p>Alle Felder k&ouml;nnen <strong>inline edtitiert</strong> werden, die Daten k&ouml;nnen danach wieder gespeichert werden. Im Inspektor k&ouml;nnen
+                        die einzelnen Objekte direkt im JSON-Format modifiziert und gespeichert werden.</p>
+                        <p>Der zugeh&ouml;rige <strong>URI zu jeder Aktion</strong> wird dynamisch auf der Seite angezeigt, so kann man nachsehen, wie
+                        der Aufruf der JSON-Schnittstelle parametrisiert werden kann.</p> -->
+                    </accordion-group>
+                    <accordion-group>
+                        <accordion-heading>
+                            REST functions <i class="icon-check"></i>
+                        </accordion-heading>
+                        
+                        <h3>Authorization</h3>
+
+                        <p>
+                        The JSON interface expects a HTTP Authorization header in the following form:
+                        <br/>
+                        <code>Authorization: Ox base64_encode(username:password)</code>
+                        <br>
+                        which means you have to concatenate username and password with ":", 
+                        Base64-encode that string and prepend the string "Ox ".
+                        </p>
+                        
+                        <div>
+                        For JavaScript requests, you can use <a target="_blank" href="http://code.google.com/p/crypto-js">CryptoJS</a>
+                        to encode your username/password combination like this:
+
+                        <pre>
+                        var secStr = CryptoJS.enc.Utf8.parse(user.username + ":" + user.password);
+                        var base64 = CryptoJS.enc.Base64.stringify(secStr);
+                        </pre>
+                        (see "js/service.js")
+                        </div>
+                        
+                        <div>
+                        <p>
+                        The JSON interface can be reached through 
+                        <strong>//SHOP.URL/oxrest/SERVICE/WITH/PARAMETERS</strong>.
+                        <br/>
+                        Available services and parameters are explained below.
+                        </p>
+                        </div>
+                        
+                        <div>
+                        The following URL formats are currently supported:
+                        <pre>
+
+                        @uri /list/:class
+                        @uri /list/:class/:page
+                        @uri /list/:class/:page/:pageSize
+                        @uri /list/:class/:page/:pageSize/:orderBy
+                        @uri /list/:class/:propertyName/:comparator/:propertyValue/:page
+                        @uri /list/:class/:propertyName/:comparator/:propertyValue/:page/:pageSize
+                        @uri /list/:class/:propertyName/:comparator/:propertyValue/:page/:pageSize/:orderBy
+
+                        </pre>
+                        for lists and
+                        <pre>
+                        @uri /oxobject/:class/:oxid
+                        </pre>
+                        for single objects. All these URIs are callable via <strong>GET</strong>.
+                        <p><strong>Important:</strong> if you use <strong>"/list/"</strong> URLs, you will get the "raw" data from the database, e.g. from the table "oxarticles".
+                        This is the fast version. If you need pre-computed OXID object data in your lists, e.g. fully loaded oxarticle object data,
+                        you can use <strong>"/oxlist/"</strong> URLs instead - this will load OXID objects and modifiy them with installed modules etc. So
+                        if you need "calculated" article prices e.g., you should use the "/oxlist/" URL mappings to retrieve data (GET), e.g.</p>
+                        
+                        <pre>
+                           @uri /oxlist/:class/:page/:pageSize 
+                        </pre>
+                        Keep in mind that these request will take more time to load and you are restricted to oxlist based objects.
+                        </div>
+                        
+                        <br/>
+                        <div>
+                            <code>class</code> -
+                            can be any existing oxList object, e.g. oxuserlist, oxarticleslist ...
+
+                            <br/>
+                            <code>page</code> -
+                            per default, ten items are returned per request.
+                            If a list contains more than ten items,
+                            paging is supported by this parameter.
+                            <br/>
+                            Page numbering starts at 0.
+
+                            <br/>
+                            <code>propertyName</code>, <code>propertyValue</code> and <code>comparator</code> -
+                            to <strong>filter</strong> list queries, two comparators are currently supported:
+                            <br/>
+                            <code>"eq"</code>  transformes to MySQL ":propertyName = ':propertyValue'"
+                            <br/>
+                            <code>"like"</code> transformes to MySQL ":propertyName LIKE '%:propertyValue%'"
+                            <br/>
+
+                            <code>propertyName</code> can be any existing MySQL column for the list base object (oxarticlelist => oxarticle...)
+                            
+                            <br/>
+                            <code>propertyValue</code> can be any arbitrary string
+
+                        </div>
+                        
+                        <br/>
+                        <div>
+                            <strong>Example service calls</strong>
+                            <pre>
+                            http://SHOP.URL/oxrest/list/oxuserlist/oxid/eq/f7f62133d58418f398aedde169cde3d4
+
+                            http://SHOP.URL/oxrest/list/oxarticlelist
+
+                            http://SHOP.URL/oxrest/list/oxarticlelist/5
+
+                            http://SHOP.URL/oxrest/list/oxarticlelist/0/15
+
+                            http://SHOP.URL/oxrest/list/oxarticlelist/oxid/eq/0655a336d18e47df9565641eaa15e2ca/0
+
+                            http://SHOP.URL/oxrest/list/oxarticlelist/oxartnum/like/1234
+                            
+                            http://SHOP.URL/oxrest/list/oxuserlist/oxlname/like/King
+
+                            http://SHOP.URL/oxrest/list/my_own_list/oxuserid/eq/f83ccf9ef669e33b5caafa4dc1c7fd4f/0
+
+                             http://SHOP.URL/oxrest/oxlist/oxarticlelist/0/15
+
+                             http://SHOP.URL/oxrest/oxlist/oxarticlelist/oxtitle/like/Kite/0
+
+                             http://SHOP.URL/oxrest/oxlist/oxarticlelist/oxtitle/like/Kite/0/10/oxtitle%20ASC
+                           </pre>                            
+                        </div>
+                        
+                        <br/>
+                        <div>
+                            For <strong>saving</strong> lists and objects, you can use the corresponding <strong>PUT</strong> methods:
+                            <pre>
+                            @uri /list/:class
+                            @uri /oxobject/:class/:oxid
+                            </pre>
+                            and send the JSON data as content.
+                        </div>
+                        <div>Of course <strong>POST</strong> and <strong>DELETE</strong> methods for creating and deleting objects are also supported.</div>
+                        
+                    </accordion-group>
+                </accordion>
+            </div>
+        </div>
+        <div class="span3">
+            <p data-i18n="_InfoRefs_"></p>
+            
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+
+    </div>
+</section>
+
+

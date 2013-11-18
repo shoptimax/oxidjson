@@ -1,0 +1,83 @@
+<div>
+    <ul class="breadcrumb">
+            <li>
+                    <a href="#">Home</a> <span class="divider">/</span>
+            </li>
+            <li>
+                    <a href="#">List</a>
+            </li>
+    </ul>
+</div>
+
+<div>
+    <div class="container-fluid" ng-show="validLogin">
+        <div class="row-fluid">
+
+            <div class="row-fluid">
+
+                <!-- Modal loading message -->
+                <div ng-show="listTracker.active()">
+                    <div class="modal fade  in" style="z-index: 1050;">
+                        <div class="modal-header">
+                            <h3>Info</h3>
+                        </div>
+                        <div class="modal-body">                            
+                            <span data-i18n="_MsgLoadingData_"></span>
+                        <img src="img/spinner.gif" border="0" title="" alt=""/>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal saving message -->
+                <div ng-show="saveTracker.active()">
+                    <div class="modal fade  in" style="z-index: 1050;">
+                        <div class="modal-header">
+                            <h3>Info</h3>
+                        </div>
+                        <div class="modal-body">                            
+                        <span data-i18n="_MsgSavingData_"></span> 
+                        <img src="img/spinner.gif" border="0" title="" alt=""/>
+                        </div>
+                        <div class="modal-footer">
+                        </div>
+                    </div>
+                    <!-- <div class="modal-backdrop fade in" style="z-index: 1040;"></div> -->
+                </div>
+
+                <!-- alerts -->
+                <div>
+                    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                </div>
+                
+                <div>
+                    <p data-i18n="_IntroList_"></p>
+                    <strong data-i18n="_PleaseChoose_"></strong> 
+                    <select ng-change="updateGrid()"
+                        ng-model="listtype"
+                        ng-options="m as m.name for m in listTypes">
+                    </select>
+                    <input type="text" value="" name="listtype" ng-model="listtype.value"/>
+                    <a class="btn" href="#" ng-click="updateGrid();" onclick="return false;" popover="oxarticlelist, oxcategorylist, oxuserlist, oxcountrylist, oxarticles, oxcontents, ..." 
+        popover-trigger="mouseenter"> <i class="icon-repeat"></i><span
+                        class="hidden-phone hidden-tablet" data-i18n="_ButtonUpdate_"></span> 
+                    </a> 
+                    <a class="btn btn-success" href="#" ng-click="updateData();" onclick="return false;" popover="Ge&auml;nderte Daten speichern" 
+        popover-trigger="mouseenter"> <i class="icon-ok-sign"></i><span
+                        class="hidden-phone hidden-tablet" data-i18n="_ButtonSaveData_"></span> 
+                    </a> 
+                    
+                </div>
+                <div><strong>Request:</strong> <code popover="REST URL" 
+                                                     popover-trigger="mouseenter">{{currReqUrl}}</code> <a href="{{currReqUrl}}" target="_blank">JSON <i class="icon-eye-open"></i></a></div>
+                <br/>
+                
+                <div class="gridStyle" ng-grid="gridOptions">
+                </div>
+                
+
+            </div>
+        </div>
+    </div>
+</div>
+

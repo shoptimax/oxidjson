@@ -1,0 +1,57 @@
+<div>
+    <ul class="breadcrumb">
+            <li>
+                    <a href="#">Home</a> <span class="divider">/</span>
+            </li>
+            <li>
+                    <a href="#">Inspector</a>
+            </li>
+    </ul>
+</div>
+
+<div class="container-fluid" ng-show="validLogin">
+    <div class="row-fluid">
+
+        <div class="row-fluid">
+            
+            <div>
+                <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+            </div>
+            
+            <div>
+                <strong data-i18n="_StrObjectType_"></strong> <input type="text" name="currClass" value="" ng-model="currClass"/>
+                <strong>OXID:</strong><input type="text" name="currId" value="" ng-model="currId"/>
+                <a class="btn" href="#" ng-click="fetchObject();" onclick="return false;"> <i class="icon-share"></i><span
+                        class="hidden-phone hidden-tablet" data-i18n="_ButtonLoadObject_"></span></a>
+                <br/>
+                <strong>Request:</strong> <code>{{currReqUrl}}</code> <a href="{{currReqUrl}}" target="_blank">JSON <i class="icon-eye-open"></i></a>
+            
+            </div>
+            <div id="objedit">
+                <textarea json rows="10" cols="250" name="oxobject" ng-model="oxobject"></textarea>
+                <br/>
+                <a class="btn btn-success" href="#" ng-click="updateData();" onclick="return false;"> <i class="icon-ok-sign"></i><span
+                    class="hidden-phone hidden-tablet" data-i18n="_ButtonSaveData_"> </span> 
+                </a> 
+                <a class="btn btn-info" href="#" ng-click="newData();" onclick="return false;" popover="Aus Daten neues Objekt erzeugen" 
+        popover-trigger="mouseenter"> <i class="icon-plus-sign"></i><span
+                    class="hidden-phone hidden-tablet" data-i18n="_ButtonCreateObject_"></span> 
+                </a> 
+                <a ng-show="currId" class="btn btn-warning" href="#" ng-click="delData();" onclick="return false;" popover="Objekt l&ouml;schen?" 
+        popover-trigger="mouseenter"> <i class="icon-remove-circle"></i><span
+                        class="hidden-phone hidden-tablet" data-i18n="_ButtonDeleteObject_"></span> 
+                </a> 
+            </div>
+            <div ng-show="oxobject">
+                <pre ng-bind="oxobject | json"></pre>
+            </div>
+            
+            
+            <!-- <p>
+              Showing of 'interpolate' filter:
+              {{ 'Current version is v%VERSION%.' | interpolate }}
+            </p> -->
+        </div>
+    </div>
+</div>
+
