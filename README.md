@@ -25,20 +25,24 @@ The autoloader created in that vendor directory will then be used by the
 
 In your OXID shop's main ".htaccess" file, add this:
 
-# Map authorization if you use CGI-PHP
+If you use CGI-PHP, allow auth header forwarding:
+```
 RewriteCond %{HTTP:Authorization} ^(.*)
 RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
+```
 
-# Rewrite rule for the JSON interface
+Add the rewrite rule for the JSON interface:
+```
 RewriteCond %{REQUEST_URI} .*oxrest.*
 RewriteCond %{REQUEST_URI} !oxrest\.php$
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule .* oxrest/oxrest.php [L,QSA]
+```
 
-before the line
+just before the line
+```
 RewriteCond %{REQUEST_URI} oxseo\.php$
-...
-
+```
 
 ## Using the JSON interface
 
