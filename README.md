@@ -10,7 +10,10 @@ PHP >= 5.3 required. You need an installed OXID eShop and an admin account (or a
 The OXID module also creates two new user groups "OXJSON Full" and "OXJSON Read-only", so you can assign
 users to these groups which then can use the JSON interface with full (CRUD with POST, PUT, DELETE) access or read-only access (only GET allowed).
 
-Copy "app/", "oxrest/" and the other files to your shop root directory.
+Copy "app/", "modules/", "oxrest/" and the other files to your shop root directory.
+
+Activate the module in the shop backend. The module only adds two new groups to the oxgroups table ("oxjsonro" and "oxjsonfull").
+Assign shop users to the new groups as required so they can login via the interface.
 
 In the root directory of the shop, execute
 `INSTALL-TONIC.sh`
