@@ -4,6 +4,8 @@
 OXID|Json is a JSON CRUD (Create, Read, Update, Delete) interface for the [OXID eShop](http://www.oxid-esales.com)
 that comes with a fancy [AngularJS](http://angularjs.org) frontend for playing around with the JSON data. It uses the [Tonic PHP framework](http://www.peej.co.uk/tonic/).
 
+You can find a demo [here](http://module2.shoptimax.de/oxjson/app/). Login with username "mrjson", password "oxid".
+
 ## Installation ##
 
 PHP >= 5.3 required. You need an installed OXID eShop and an admin account (or a user assigned to a special group) for login.
