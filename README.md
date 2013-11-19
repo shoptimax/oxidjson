@@ -64,9 +64,10 @@ which means you have to concatenate username and password with ":",
 Base64-encode that string and prepend the string "Ox ".
 
 For JavaScript requests, you can use CryptJS to encode your username/password combination like this:
-
+```
 var secStr = CryptoJS.enc.Utf8.parse(user.username + ":" + user.password);
 var base64 = CryptoJS.enc.Base64.stringify(secStr);
+```
 
 ### Available services
 
