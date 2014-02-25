@@ -16,8 +16,8 @@
  *
  * @link      http://www.shoptimax.de
  * @package   oxjson
- * @copyright (C) shoptimax GmbH 2013
- * @version 1.0.0
+ * @copyright (C) shoptimax GmbH 2013-2014
+ * @version 1.0.1
  * @author Stefan Moises <moises@shoptimax.de>
  */
 
@@ -95,7 +95,7 @@ angular.module('myApp.directives', []).
       // $watch(attrs.ngModel) wouldn't work if this directive created a new scope;
       // see http://stackoverflow.com/questions/14693052/watch-ngmodel-from-inside-directive-using-isolate-scope how to do it then
       scope.$watch(attrs.ngModel, function(newValue, oldValue) {
-        if (newValue != oldValue) {
+        if (newValue !== oldValue) {
           ngModelCtrl.$setViewValue(toUser(newValue));
           // TODO avoid this causing the focus of the input to be lost..
           ngModelCtrl.$render();

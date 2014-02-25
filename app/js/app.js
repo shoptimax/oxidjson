@@ -16,15 +16,15 @@
  *
  * @link      http://www.shoptimax.de
  * @package   oxjson
- * @copyright (C) shoptimax GmbH 2013
- * @version 1.0.0
+ * @copyright (C) shoptimax GmbH 2013-2014
+ * @version 1.0.1
  * @author Stefan Moises <moises@shoptimax.de>
  */
 
 'use strict';
 
 // Declare app level module which depends on filters, and services
-angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'ui.bootstrap', 'ngGrid', 'ajoslin.promise-tracker', 'localization']).
+angular.module('myApp', ['myApp.controllers', 'myApp.filters', 'myApp.services', 'myApp.directives', 'ui.bootstrap', 'ngGrid', 'ajoslin.promise-tracker', 'localization']).
         config(['$routeProvider', '$locationProvider', '$httpProvider', '$provide',
     function($routeProvider, $locationProvider, $httpProvider, $provide) {
 

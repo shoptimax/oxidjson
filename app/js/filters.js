@@ -16,8 +16,8 @@
  *
  * @link      http://www.shoptimax.de
  * @package   oxjson
- * @copyright (C) shoptimax GmbH 2013
- * @version 1.0.0
+ * @copyright (C) shoptimax GmbH 2013-2014
+ * @version 1.0.1
  * @author Stefan Moises <moises@shoptimax.de>
  */
 
