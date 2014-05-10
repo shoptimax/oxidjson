@@ -59,6 +59,9 @@ class OxRestBase extends Resource {
         if (!isset($authHeader) || '' === $authHeader) {
             $authHeader = $oUtilsServer->getServerVar('REDIRECT_HTTP_AUTHORIZATION');
         }
+        if($authHeader) {
+            $this->_doLog("Auth header: " . $authHeader);
+        }
         // Auth comes as "Ox <base64_encoded username:password>"...
         // So strip the "Ox " prefix, base64_decode the remaining string 
         // and split username and password at the ":" char
@@ -80,7 +83,7 @@ class OxRestBase extends Resource {
                     $this->_doLog("Login NOT successful for user $sUser");
                     throw new Tonic\UnauthorizedException;
                 } else {
-                    $this->_doLog("Login dsuccessful for user $sUser - " . $oSession->getVariable('usr'));
+                    $this->_doLog("Login successful for user $sUser - " . $oSession->getVariable('usr'));
                     $oSession->regenerateSessionId();
                 }
             }
