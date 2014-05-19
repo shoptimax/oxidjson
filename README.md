@@ -63,7 +63,24 @@ The JSON interface expects a HTTP Authorization header in the following form:
 which means you have to concatenate username and password with ":", 
 Base64-encode that string and prepend the string "Ox ".
 
-For JavaScript requests, you can use CryptJS to encode your username/password combination like this:
+A simple '''cURL request''' could look like this:
+```
+$userName = "admin@myshop.de";
+$passWord = "mypass";
+// get oxid article list
+$ch = curl_init('http://www.myshop.de/oxrest/oxlist/oxarticlelist');
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    // send custom auth header
+    'Authorization: Ox ' . base64_encode($userName . ":" . $passWord))                                                                       
+);
+$result = curl_exec($ch);
+echo "<pre>";
+print_r(json_decode($result));
+echo "</pre>";
+```
+
+For '''JavaScript requests''', you can use CryptJS to encode your username/password combination like this:
 ```
 var secStr = CryptoJS.enc.Utf8.parse(user.username + ":" + user.password);
 var base64 = CryptoJS.enc.Base64.stringify(secStr);
