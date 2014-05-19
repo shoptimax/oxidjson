@@ -84,6 +84,13 @@ For **JavaScript requests**, you can use CryptJS to encode your username/passwor
 ```javascript
 var secStr = CryptoJS.enc.Utf8.parse(user.username + ":" + user.password);
 var base64 = CryptoJS.enc.Base64.stringify(secStr);
+// and use it e.g. with AngularJS post():
+$http.post($rootScope.basePath + '/oxrest/action/login', jsonData, {
+    headers : {
+        // use custom auth header
+        Authorization : 'Ox ' + base64
+    }
+}) ...
 ```
 
 ### Available services
