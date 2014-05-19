@@ -63,8 +63,8 @@ The JSON interface expects a HTTP Authorization header in the following form:
 which means you have to concatenate username and password with ":", 
 Base64-encode that string and prepend the string "Ox ".
 
-A simple '''cURL request''' could look like this:
-```
+A simple **cURL request** could look like this:
+```php
 $userName = "admin@myshop.de";
 $passWord = "mypass";
 // get oxid article list
@@ -80,8 +80,8 @@ print_r(json_decode($result));
 echo "</pre>";
 ```
 
-For '''JavaScript requests''', you can use CryptJS to encode your username/password combination like this:
-```
+For **JavaScript requests**, you can use CryptJS to encode your username/password combination like this:
+```javascript
 var secStr = CryptoJS.enc.Utf8.parse(user.username + ":" + user.password);
 var base64 = CryptoJS.enc.Base64.stringify(secStr);
 ```
