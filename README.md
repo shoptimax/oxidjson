@@ -1,7 +1,7 @@
 # OXID|Json #
 
 ## What is it? ##
-OXID|Json is a JSON CRUD (Create, Read, Update, Delete) interface for the [OXID eShop](http://www.oxid-esales.com)
+OXID|Json is a REST / JSON CRUD (Create, Read, Update, Delete) interface for the [OXID eShop](http://www.oxid-esales.com)
 that comes with a fancy [AngularJS](http://angularjs.org) frontend for playing around with the JSON data. It uses the [Tonic PHP framework](http://www.peej.co.uk/tonic/).
 
 You can find a demo [here](http://module2.shoptimax.de/oxjson/app/). Login with username "mrjson", password "oxid".
@@ -10,7 +10,7 @@ You can find a demo [here](http://module2.shoptimax.de/oxjson/app/). Login with 
 
 PHP >= 5.3 required. You need an installed OXID eShop and an admin account (or a user assigned to a special group) for login.
 The OXID module also creates two new user groups "OXJSON Full" and "OXJSON Read-only", so you can assign
-users to these groups which then can use the JSON interface with full (CRUD with POST, PUT, DELETE) access or read-only access (only GET allowed).
+users to these groups which then can use the REST interface with full (CRUD with POST, PUT, DELETE) access or read-only access (only GET allowed).
 
 Copy "app/", "modules/", "oxrest/" and the other files to your shop root directory.
 
@@ -24,7 +24,7 @@ after changing the php executable path in it.
 
 This will execute composer.phar with it's configuration file composer.json.
 
-Composer will then create a "vendor" subdirectory, where it downloads and installs TONIC.
+Composer will then create a "vendor" subdirectory, where it downloads and installs the TONIC REST framework.
 
 The autoloader created in that vendor directory will then be used by the
 "/oxrest/oxrest.php" file.
@@ -50,14 +50,14 @@ just before the line
 RewriteCond %{REQUEST_URI} oxseo\.php$
 ```
 
-## Using the JSON interface
+## Using the REST interface
 
-The JSON interface can be reached through http://SHOP.URL/oxrest/SERVICE/WITH/PARAMETERS.
+The REST interface can be reached through http://SHOP.URL/oxrest/SERVICE/WITH/PARAMETERS.
 Available services and parameters are explained below.
 
 ### Authorization
 
-The JSON interface expects a HTTP Authorization header in the following form:
+The REST interface expects a HTTP Authorization header in the following form:
 
 > Authorization: Ox base64_encode(username:password)
 which means you have to concatenate username and password with ":", 
@@ -72,7 +72,7 @@ $ch = curl_init('http://www.myshop.de/oxrest/oxlist/oxarticlelist');
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
     // send custom auth header
-    'Authorization: Ox ' . base64_encode($userName . ":" . $passWord))                                                                       
+    'Authorization: Ox ' . base64_encode($userName . ":" . $passWord))
 );
 $result = curl_exec($ch);
 echo "<pre>";

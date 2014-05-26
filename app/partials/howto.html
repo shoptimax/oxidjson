@@ -29,7 +29,7 @@
                         </accordion-heading>
                         <p>PHP >= 5.3 required. You need an installed OXID eShop and an admin account for login. The OXID module
                         also creates two new user groups "OXJSON Full" and "OXJSON Read-only", so you can assign
-                        users to these groups which then can use the JSON interface with full (CRUD with POST, PUT, DELETE) access or read-only access (only GET allowed).</p>
+                        users to these groups which then can use the REST interface with full (CRUD with POST, PUT, DELETE) access or read-only access (only GET allowed).</p>
                     </accordion-group>
                     <accordion-group>
                         <accordion-heading>
@@ -43,7 +43,7 @@
 
                         <p>This will execute composer.phar with it's configuration file composer.json.
 
-                        Composer will then create a "vendor" subdirectory, where it installs TONIC.</p>
+                        Composer will then create a "vendor" subdirectory, where it installs the TONIC REST framework.</p>
 
                         <p>The autoloader created in that vendor directory will then be used by the
                         "/oxrest/oxrest.php" file.</p>
@@ -72,7 +72,7 @@
                         
                     </accordion-group>
                     <accordion-group heading="Using the AngularJS demo client">
-                        <p>To use the client you need a login for the shop. You can use this AngularJS client to test the JSON interface
+                        <p>To use the client you need a login for the shop. You can use this AngularJS client to test the REST interface
                             and select OXID objects or lists. It is possible to select either <code>oxList</code> based lists (or any other
                             database table, see below) in the <a href="#/list">Listview</a> or to load specific objects with the <a href="#/inspector">Inspector</a>.
                             One click on the "Details" button in the list view also takes you to the object's details in the "Inspector".
@@ -102,7 +102,7 @@
                         <h3>Authorization</h3>
 
                         <p>
-                        The JSON interface expects a HTTP Authorization header in the following form:
+                        The REST interface expects a HTTP Authorization header in the following form:
                         <br/>
                         <code>Authorization: Ox base64_encode(username:password)</code>
                         <br>
@@ -151,7 +151,7 @@
                         
                         <div>
                         <p>
-                        The JSON interface can be reached through 
+                        The REST interface can be reached through 
                         <strong>//SHOP.URL/oxrest/SERVICE/WITH/PARAMETERS</strong>.
                         <br/>
                         Available services and parameters are explained below.
