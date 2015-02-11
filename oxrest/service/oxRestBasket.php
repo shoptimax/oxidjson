@@ -65,9 +65,9 @@ class oxRestBasket extends OxRestBase {
 			return new Response( 200, $a_ret );
 
 			
-        } catch ( Exception $ex ) {
-        	
-            $this->_doLog( "Error getting basket: " . $ex->getMessage() );
+		} catch ( Exception $ex ) {
+			
+			$this->_doLog( "Error getting basket: " . $ex->getMessage() );
 		}
 		
 		return new Response(404, "Not found");
@@ -164,7 +164,7 @@ class oxRestBasket extends OxRestBase {
 			
 		} catch (Exception $ex) {
 			
-            $this->_doLog( "Error deleting from basket: " . $ex->getMessage() );
+			$this->_doLog( "Error deleting from basket: " . $ex->getMessage() );
 		}
 		
 		return new Response(404, "Not found");
