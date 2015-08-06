@@ -3,7 +3,7 @@ This is the OXID|Json changelog.
 
 
 ## [1.1.0] - 2015-07-27
-(c) 2015 [Proud Sourcing](http://www.proudcommerce.de/), NŸrnberg, Germany
+(c) 2015 [Proud Sourcing](http://www.proudcommerce.de/), Nuremberg, Germany
 ### Added
 - introduced CHANGLOG :)
 - added module settings for blacklisted fields, e.g. password or passsalt
@@ -15,6 +15,6 @@ This is the OXID|Json changelog.
 - updated for OXID >= CE 4.9 / EE 5.2
 
 
-## [1.0.0] - 2015-04-01
-(c) 2013 [shoptimax](http://www.shoptimax.de/), NŸrnberg, Germany
+## [1.0.0] - 2013-11-18
+(c) 2013 [shoptimax](http://www.shoptimax.de/), Nuremberg , Germany
 - Initial release.
