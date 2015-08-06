@@ -18,7 +18,7 @@
  * @link      http://www.shoptimax.de
  * @package   oxjson
  * @copyright (C) shoptimax GmbH 2013-2016
- * @version 1.0.1
+ * @version 1.1.0
  */
 
 use Tonic\Resource;
@@ -26,16 +26,14 @@ use Tonic\Resource;
 /**
  * Class OxRestBase
  */
-class OxRestBase extends Resource
-{
+class OxRestBase extends Resource {
+
     /**
-     *
      * @var bool Activate logging
      */
     protected $_debug = true;
     
     /**
-     *
      * @var oxUser Logged in user.
      */
     protected $_oUser = null;
@@ -177,7 +175,6 @@ class OxRestBase extends Resource
      */
     protected function _oxObject2Array($o)
     {
-
         $vars = get_object_vars($o);
         $a = array();
         foreach ($vars as $key => $value) {
@@ -186,10 +183,7 @@ class OxRestBase extends Resource
             foreach ($vars as $key => $value) {
                 if (($pos = strpos($key, '__')) > 0) {
                     $key = substr($key, $pos + 2);
-                    if (
-                            strpos($key, 'password') > 0 ||
-                            strpos($key, 'passsalt') > 0
-                    ) {
+                    if ($this->_keyIsBlacklisted($key)) {
                         continue;
                     }
                     $value = $value->getRawValue();
@@ -198,6 +192,25 @@ class OxRestBase extends Resource
             }
         }
         return $a;
+    }
+
+    /**
+     * Check if a certain object key is blacklisted, e.g. password fields
+     *
+     * @param string $sKey
+     * @return bool
+     */
+    protected function _keyIsBlacklisted($sKey)
+    {
+        $aBlacklisted = oxRegistry::getConfig()->getShopConfVar('aOxidJsonBlacklistKeys');
+        if ($aBlacklisted && is_array($aBlacklisted)) {
+            foreach ($aBlacklisted as $sTerm) {
+                if (strpos($sKey, $sTerm) > 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -217,7 +230,13 @@ class OxRestBase extends Resource
             // for recursive call
             return array_map(array('oxRestBase','_objectToArray'), $d);
         } else {
-            // Return array
+            // return filtered array
+            foreach ($d as $k => $v) {
+                $k = strtolower($k);
+                if ($this->_keyIsBlacklisted($k)) {
+                    unset($d[$k]);
+                }
+            }
             return $d;
         }
     }
@@ -233,5 +252,4 @@ class OxRestBase extends Resource
             oxRegistry::getUtils()->writeToLog(date("Y-m-d H:i:s") . " " . $msg . "\n", $filename);
         }
     }
-
 }

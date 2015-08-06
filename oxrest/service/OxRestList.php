@@ -18,14 +18,13 @@
  * @link      http://www.shoptimax.de
  * @package   oxjson
  * @copyright (C) shoptimax GmbH 2013-2016
- * @version 1.0.1
+ * @version 1.1.0
  */
 
 use Tonic\Response;
 
 /**
  * CRUD for lists of objects, uses oxList based collections.
- * 
  * @uri /oxlist/:class
  * @uri /oxlist/:class/:page
  * @uri /oxlist/:class/:page/:pageSize
@@ -130,11 +129,10 @@ class OxRestList extends OxRestBase
      */
     public function saveList($class)
     {
-        $this->_doLog("saveList");
         try {
             $ret = array();
             // check for data in request
-            if ($this->request->data) {
+            if ($this->request->data && $this->request->data != "") {
                 $this->_doLog("CLASS: $class\nDATA: " . print_r(json_encode($this->request->data), true));
                 
                 /** @var oxList $list */
@@ -173,11 +171,10 @@ class OxRestList extends OxRestBase
      */
     public function createFromList($class)
     {
-        $this->_doLog("createFromList");
         try {
             $ret = array();
             // check for data in request
-            if ($this->request->data) {
+            if ($this->request->data && $this->request->data != "") {
                 /** @var oxList $list */
                 $list = oxNew($class);
                 $bo = $list->getBaseObject();
@@ -190,7 +187,8 @@ class OxRestList extends OxRestBase
                     $oxObj = clone $bo;
                     if (!isset($sOxid) || $sOxid == '') {
                         // create new OXID
-                        $sOxid = oxUtilsObject::getInstance()->generateUId();
+                        $sOxid = oxRegistry::get('oxUtilsObject')->generateUId();
+                        $aObjData['oxid'] = $sOxid;
                     } else {
                         // object id must be new!
                         if ($oxObj->load($sOxid)) {
@@ -210,4 +208,3 @@ class OxRestList extends OxRestBase
         return new Response(500);
     }
 }
-

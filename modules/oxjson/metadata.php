@@ -36,7 +36,7 @@ $aModule = array(
         'en' => 'OXJSON - generic JSON module for OXID with AngularJS frontend.',
     ),
     'thumbnail'    => 'logo.png',
-    'version'      => '1.0.1',
+    'version'      => '1.1.0',
     'author'       => 'shoptimax GmbH',
     'url'          => 'http://www.shoptimax.de/',
     'email'        => 'support@shoptimax.de',
@@ -51,6 +51,7 @@ $aModule = array(
         'onActivate' => 'oxjson_setup::onActivate',
     ),
    'settings' => array(
+       array('group' => 'oxidjson', 'name' => 'aOxidJsonBlacklistKeys', 'type' => 'arr',  'value' => array('password', 'passsalt')),
     )
 );
 ?>

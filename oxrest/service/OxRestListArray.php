@@ -18,7 +18,7 @@
  * @link      http://www.shoptimax.de
  * @package   oxjson
  * @copyright (C) shoptimax GmbH 2013-2016
- * @version 1.0.1
+ * @version 1.1.0
  */
 
 use Tonic\Response;
@@ -100,7 +100,10 @@ class OxRestListArray extends OxRestBase
                 $aData2 = array();
                 // lowercase keys from OXID to oxid etc. for the view
                 foreach ($aData as $aKey => $aVal) {
-                    $aData2[strtolower($aKey)] = $aVal;
+                    $aKey = strtolower($aKey);
+                    if (!$this->_keyIsBlacklisted($aKey)) {
+                        $aData2[$aKey] = $aVal;
+                    }
                 }
                 $l[$aData2['oxid']] = $aData2;
             }
@@ -136,7 +139,7 @@ class OxRestListArray extends OxRestBase
         try {
             $ret = array();
             // check for data in request
-            if ($this->request->data) {
+            if ($this->request->data && $this->request->data != "") {
                 //$this->_doLog("CLASS: $class\nDATA: " . print_r(json_encode($this->request->data), true));
                 
                 $tableName = $this->_getTableName($class);
@@ -158,7 +161,7 @@ class OxRestListArray extends OxRestBase
                     }
                     $sSql .= " where oxid=?";
                     $aVals[] = $aArr['oxid'];
-                    //$this->_doLog($sSql . " " . print_r($aVals, true));
+                    $this->_doLog($sSql . " " . print_r($aVals, true));
                     $res = $oDb->execute($sSql, $aVals);
                     if (!$res) {
                         $this->_doLog("Update error: " . mysql_error());
@@ -189,7 +192,7 @@ class OxRestListArray extends OxRestBase
         try {
             $ret = array();
             // check for data in request
-            if (isset($this->request->data)  && $this->request->data != "") {
+            if ($this->request->data && $this->request->data != "") {
                 $tableName = $this->_getTableName($class);
                 $aData = $this->request->data;
                 foreach ($aData as $idx => $oData) {

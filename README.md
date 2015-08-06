@@ -54,6 +54,10 @@ just before the line
 RewriteCond %{REQUEST_URI} oxseo\.php$
 ```
 
+If you have problems accessing the "/app" directory for the AngularJS frontend, try to change the DirectoryIndex order
+in .htaccess to this:
+DirectoryIndex index.html index.php
+
 ## Using the REST interface
 
 The REST interface can be reached through http://SHOP.URL/oxrest/SERVICE/WITH/PARAMETERS.
@@ -172,6 +176,15 @@ http://SHOP.URL/oxrest/oxlist/oxarticlelist/oxtitle/like/Kite/0
 
 http://SHOP.URL/oxrest/oxlist/oxarticlelist/oxtitle/like/Kite/0/10/oxtitle%20ASC
 
+http://SHOP.URL/oxrest/oxlist/oxpaymentlist/
+
+http://SHOP.URL/oxrest/oxobject/oxuser/36944b76cc9604c53.04579642
+
+http://SHOP.URL/oxrest/oxobject/oxaddress/bbfe68477db2a8e27c50683495ec4da4
+
+http://SHOP.URL/oxrest/oxobject/oxnewssubscribed/36944b76cc9604c53.04579642
+
+http://SHOP.URL/oxrest/oxobject/oxarticle/0584e8b766a4de2177f9ed11d1587f55
 
 For saving lists and objects, you can use the corresponding PUT methods:
 
@@ -181,4 +194,10 @@ For saving lists and objects, you can use the corresponding PUT methods:
 and send the JSON data as content.
 
 Of course POST and DELETE methods for creating and deleting objects are also supported.
+
+
+Copyright
+
+	Proud Sourcing GmbH 2015 / www.proudcommerce.com
+	shoptimax GmbH / www.shoptimax.de
 							
