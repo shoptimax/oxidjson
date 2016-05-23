@@ -300,6 +300,7 @@ myApp.controller('ListCtrl', ['$scope', '$http', '$rootScope', '$location', 'pro
         var mlist = $scope.listtype.value;
         $scope.currReqUrl = $rootScope.basePath + "/oxrest/" + $scope.listVariation + "/" + mlist;
         var responsePromise = OxRest.savePagedData($scope.listVariation, mlist, $scope.myData);
+        console.log("List variation: " + $scope.listVariation);
         // display waiting animation while processing....
         $scope.saveTracker.addPromise(responsePromise);
         // whenever we are finished, process data...

@@ -17,8 +17,8 @@
  *
  * @link      http://www.shoptimax.de
  * @package   oxjson
- * @copyright (C) shoptimax GmbH 2013
- * @version 1.0.0
+ * @copyright (C) shoptimax GmbH 2013-2016
+ * @version 1.0.1
  */
 
 use Tonic\Response;
@@ -35,7 +35,7 @@ use Tonic\Response;
  * @uri /oxlist/:class/:propertyName/:comparator/:propertyValue/:page/:pageSize/:orderBy
  */
 class OxRestList extends OxRestBase
-{    
+{
     /**
      * @method GET
      * @json
@@ -73,7 +73,7 @@ class OxRestList extends OxRestBase
 
             // order by
             $sOrderBy = "oxid ASC";
-            if(isset($this->orderBy)) {
+            if (isset($this->orderBy)) {
                 $sOrderBy = urldecode($this->orderBy);
             }
             $sSql .= " ORDER BY $sOrderBy";
@@ -109,7 +109,7 @@ class OxRestList extends OxRestBase
             $ret['objectType'] = get_class($bo);
             $ret['result']     = $l;
             $ret['numCurr'] = count($l);
-            //$this->_doLog("list: " . print_r($l, true));    
+            //$this->_doLog("list: " . print_r($l, true));
             
             return new Response(200, $ret);
         } catch (Exception $ex) {
@@ -130,24 +130,24 @@ class OxRestList extends OxRestBase
      */
     public function saveList($class)
     {
-        $oDb = oxDb::getDb();
+        $this->_doLog("saveList");
         try {
             $ret = array();
             // check for data in request
-            if(isset($this->request->data)  && $this->request->data != ""){
-                //$this->_doLog("CLASS: $class\nDATA: " . print_r(json_encode($this->request->data), true));
+            if ($this->request->data) {
+                $this->_doLog("CLASS: $class\nDATA: " . print_r(json_encode($this->request->data), true));
                 
                 /** @var oxList $list */
                 $list = oxNew($class);
                 $bo = $list->getBaseObject();
                 $aData = $this->request->data;
-                foreach($aData as $idx => $oData) {
+                foreach ($aData as $idx => $oData) {
                     // convert stdObj to array
                     $aObjData = $this->_objectToArray($oData);
                     // get OXID and create new object by cloning
                     $sOxid = $aObjData['oxid'];
                     $oxObj = clone $bo;
-                    if($oxObj->load($sOxid)) {
+                    if ($oxObj->load($sOxid)) {
                         // assign new array data
                         $oxObj->assign($aObjData);
                         // save object
@@ -173,27 +173,27 @@ class OxRestList extends OxRestBase
      */
     public function createFromList($class)
     {
+        $this->_doLog("createFromList");
         try {
             $ret = array();
             // check for data in request
-            if(isset($this->request->data)  && $this->request->data != ""){
+            if ($this->request->data) {
                 /** @var oxList $list */
                 $list = oxNew($class);
                 $bo = $list->getBaseObject();
                 $aData = $this->request->data;
-                foreach($aData as $idx => $oData) {
+                foreach ($aData as $idx => $oData) {
                     // convert stdObj to array
                     $aObjData = $this->_objectToArray($oData);
                     // get OXID and create new object by cloning
                     $sOxid = $aObjData['oxid'];
                     $oxObj = clone $bo;
-                    if(!isset($sOxid) || $sOxid == '') {
+                    if (!isset($sOxid) || $sOxid == '') {
                         // create new OXID
                         $sOxid = oxUtilsObject::getInstance()->generateUId();
-                    }
-                    else {
+                    } else {
                         // object id must be new!
-                        if($oxObj->load($sOxid)) {
+                        if ($oxObj->load($sOxid)) {
                             return  new Response(500, "Object exists!");
                         }
                     }
@@ -209,5 +209,5 @@ class OxRestList extends OxRestBase
         }
         return new Response(500);
     }
-    
 }
+

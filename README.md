@@ -20,9 +20,13 @@ Assign shop users to the new groups as required so they can login via the interf
 [Get Composer](http://getcomposer.org/), copy composer.phar to your shop directory.
 In the root directory of the shop, execute
 `INSTALL-TONIC.sh`
-after changing the php executable path in it.
+after changing the php executable path in it, or run Composer install / update yourself.
 
-This will execute composer.phar with it's configuration file composer.json.
+This will execute composer.phar with it's configuration file composer.json. If you already have your own composer.json, just add the requirement
+```
+"peej/tonic": "dev-master"
+```
+to it.
 
 Composer will then create a "vendor" subdirectory, where it downloads and installs the TONIC REST framework.
 

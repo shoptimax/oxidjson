@@ -81,6 +81,7 @@ angular.module('myApp', ['myApp.controllers', 'myApp.filters', 'myApp.services',
                 // set data to read only for demo
                 $rootScope.readOnly = false;
                 $rootScope.basePath = window.location.pathname.replace("/app/", "");
+                $rootScope.basePath = $rootScope.basePath.replace("index.html", "");
                 // this is only called on first load / full reload of the page,
                 $http.get($rootScope.basePath + '/oxrest/action/checklogin').success(function(response) {
                     $rootScope.validLogin = true;

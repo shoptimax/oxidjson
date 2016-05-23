@@ -17,8 +17,8 @@
  *
  * @link      http://www.shoptimax.de
  * @package   oxjson
- * @copyright (C) shoptimax GmbH 2013
- * @version 1.0.0
+ * @copyright (C) shoptimax GmbH 2013-2016
+ * @version 1.0.1
  */
 
 use Tonic\Resource;
@@ -26,11 +26,11 @@ use Tonic\Resource;
 /**
  * Class OxRestBase
  */
-class OxRestBase extends Resource {
-
+class OxRestBase extends Resource
+{
     /**
      *
-     * @var bool Activate logging 
+     * @var bool Activate logging
      */
     protected $_debug = true;
     
@@ -43,8 +43,10 @@ class OxRestBase extends Resource {
 
     /**
      * @throws Tonic\UnauthorizedException
+     * @return null
      */
-    public function setup() {
+    public function setup()
+    {
         $oSession = oxRegistry::getSession();
         $oUtilsServer = oxRegistry::get('oxUtilsServer');
         $oUser = oxNew('oxuser');
@@ -55,15 +57,15 @@ class OxRestBase extends Resource {
             return;
         }
         // get auth header and check login data submitted
-        $authHeader = $oUtilsServer->getServerVar('HTTP_AUTHORIZATION');       
+        $authHeader = $oUtilsServer->getServerVar('HTTP_AUTHORIZATION');
         if (!isset($authHeader) || '' === $authHeader) {
             $authHeader = $oUtilsServer->getServerVar('REDIRECT_HTTP_AUTHORIZATION');
         }
-        if($authHeader) {
+        if ($authHeader) {
             $this->_doLog("Auth header: " . $authHeader);
         }
         // Auth comes as "Ox <base64_encoded username:password>"...
-        // So strip the "Ox " prefix, base64_decode the remaining string 
+        // So strip the "Ox " prefix, base64_decode the remaining string
         // and split username and password at the ":" char
         $userNamePassword = explode(":", base64_decode(substr($authHeader, 3)));
         if (!is_array($userNamePassword) || count($userNamePassword) < 2) {
@@ -95,20 +97,21 @@ class OxRestBase extends Resource {
 
     /**
      * Is the user authorized to use OXJSON?
-     * @param oxUser $oUser 
+     * @param oxUser $oUser
      * @return boolean
      */
-    protected function hasValidLogin($oUser = null) {
-        if(!$this->_oUser && !$oUser) {
+    protected function hasValidLogin($oUser = null)
+    {
+        if (!$this->_oUser && !$oUser) {
             return false;
         }
-        if(!$oUser) {
+        if (!$oUser) {
             $oUser = $this->_oUser;
         }
         $isAdmin = $oUser->inGroup('oxidadmin');
         $isRoUser = $oUser->inGroup('oxjsonro');
         $isFullUser = $oUser->inGroup('oxjsonfull');
-        if( $isAdmin || $isRoUser || $isFullUser ) {
+        if ($isAdmin || $isRoUser || $isFullUser) {
             return true;
         }
         return false;
@@ -118,13 +121,14 @@ class OxRestBase extends Resource {
      * Is the user authorized for full access (CRUD)?
      * @return boolean
      */
-    protected function hasFullAccess() {
-        if(!$this->_oUser) {
+    protected function hasFullAccess()
+    {
+        if (!$this->_oUser) {
             return false;
         }
         $isAdmin = $this->_oUser->inGroup('oxidadmin');
         $isFullUser = $this->_oUser->inGroup('oxjsonfull');
-        if( $isAdmin || $isFullUser ) {
+        if ($isAdmin || $isFullUser) {
             return true;
         }
         return false;
@@ -134,8 +138,9 @@ class OxRestBase extends Resource {
      * Check access rights for POST, PUT, DELETE
      * @throws Tonic\ConditionException
      */
-    public function hasRwAccessRights() {
-        if(!$this->hasFullAccess()) {
+    public function hasRwAccessRights()
+    {
+        if (!$this->hasFullAccess()) {
             throw new Tonic\ConditionException;
         }
     }
@@ -147,20 +152,21 @@ class OxRestBase extends Resource {
      * before filter decodes the request body if the request content type is JSON, while the
      * after filter encodes the response body into JSON.
      */
-    protected function json() {
+    protected function json()
+    {
         $this->before(function ($request) {
-                    if ($request->contentType == "application/json") {
-                        $request->data = json_decode($request->data);
-                    }
-                });
+            if ($request->contentType == "application/json") {
+                $request->data = json_decode($request->data);
+            }
+        });
         $this->after(function ($response) {
-                    $response->contentType = "application/json";
-                    if (isset($_GET['jsonp'])) {
-                        $response->body = $_GET['jsonp'] . '(' . json_encode($response->body) . ');';
-                    } else {
-                        $response->body = json_encode($response->body);
-                    }
-                });
+            $response->contentType = "application/json";
+            if (isset($_GET['jsonp'])) {
+                $response->body = $_GET['jsonp'] . '(' . json_encode($response->body) . ');';
+            } else {
+                $response->body = json_encode($response->body);
+            }
+        });
     }
 
     /**
@@ -169,7 +175,8 @@ class OxRestBase extends Resource {
      * @param object $o
      * @return array
      */
-    protected function _oxObject2Array($o) {
+    protected function _oxObject2Array($o)
+    {
 
         $vars = get_object_vars($o);
         $a = array();
@@ -198,29 +205,30 @@ class OxRestBase extends Resource {
      * @param object $d
      * @return array
      */
-    protected function _objectToArray($d) {
-            if (is_object($d)) {
-                // Gets the properties of the given object
-                // with get_object_vars function
-                $d = get_object_vars($d);
-            }
+    protected function _objectToArray($d)
+    {
+        if (is_object($d)) {
+            // Gets the properties of the given object
+            // with get_object_vars function
+            $d = get_object_vars($d);
+        }
 
-            if (is_array($d)) {
-                // for recursive call
-                return array_map(array('oxRestBase','_objectToArray'), $d);
-            }
-            else {
-                // Return array
-                return $d;
-            }
-	}
+        if (is_array($d)) {
+            // for recursive call
+            return array_map(array('oxRestBase','_objectToArray'), $d);
+        } else {
+            // Return array
+            return $d;
+        }
+    }
     
     /**
      * General logging function
      * @param string $msg
      * @param string $filename
      */
-    protected function _doLog($msg, $filename = "rest.log") {
+    protected function _doLog($msg, $filename = "rest.log")
+    {
         if ($this->_debug) {
             oxRegistry::getUtils()->writeToLog(date("Y-m-d H:i:s") . " " . $msg . "\n", $filename);
         }

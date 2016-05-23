@@ -36,7 +36,7 @@ $aModule = array(
         'en' => 'OXJSON - generic JSON module for OXID with AngularJS frontend.',
     ),
     'thumbnail'    => 'logo.png',
-    'version'      => '1.0.0',
+    'version'      => '1.0.1',
     'author'       => 'shoptimax GmbH',
     'url'          => 'http://www.shoptimax.de/',
     'email'        => 'support@shoptimax.de',

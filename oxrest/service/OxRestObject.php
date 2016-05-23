@@ -17,8 +17,8 @@
  *
  * @link      http://www.shoptimax.de
  * @package   oxjson
- * @copyright (C) shoptimax GmbH 2013
- * @version 1.0.0
+ * @copyright (C) shoptimax GmbH 2013-2016
+ * @version 1.0.1
  */
 
 use Tonic\Response;
@@ -64,14 +64,14 @@ class OxRestObject extends OxRestBase
     {
         try {
             // check for data in request
-            if(isset($this->request->data)  && $this->request->data != ""){
+            if ($this->request->data) {
                 $aData = $this->request->data;
                 // convert stdObj to array
                 $aObjData = $this->_objectToArray($aData);
                 // get OXID and create new object by cloning
                 $sOxid = $aObjData['oxid'];
                 $oxObj = oxNew($class);
-                if($oxObj->load($sOxid)) {
+                if ($oxObj->load($sOxid)) {
                     // assign new array data
                     $oxObj->assign($aObjData);
                     // save object
@@ -98,20 +98,19 @@ class OxRestObject extends OxRestBase
     {
         try {
             // check for data in request
-            if(isset($this->request->data)  && $this->request->data != ""){                
+            if ($this->request->data) {
                 $aData = $this->request->data;
                 // convert stdObj to array
                 $aObjData = $this->_objectToArray($aData);
                 // get OXID and create new object by cloning
                 $sOxid = $aObjData['oxid'];
                 $oxObj = oxNew($class);
-                if(!isset($sOxid) || $sOxid == '') {
+                if (!isset($sOxid) || $sOxid == '') {
                     // create new OXID
                     $sOxid = oxUtilsObject::getInstance()->generateUId();
-                }
-                else {
+                } else {
                     // object id must be new!
-                    if($oxObj->load($sOxid)) {
+                    if ($oxObj->load($sOxid)) {
                         return  new Response(500, "Object exists!");
                     }
                 }
@@ -141,15 +140,13 @@ class OxRestObject extends OxRestBase
             /** @var oxBase $o */
             $o = oxNew($class);
             if ($o->load($oxid)) {
-                if($o->delete()) {
+                if ($o->delete()) {
                     return new Response(200, "OK");
                 }
             }
         } catch (Exception $ex) {
 
         }
-
         return new Response(404);
     }
-    
 }

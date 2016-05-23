@@ -17,8 +17,8 @@
  *
  * @link      http://www.shoptimax.de
  * @package   oxjson
- * @copyright (C) shoptimax GmbH 2013
- * @version 1.0.0
+ * @copyright (C) shoptimax GmbH 2013-2016
+ * @version 1.0.1
  */
 
 use Tonic\Response;
@@ -26,7 +26,7 @@ use Tonic\Response;
 /**
  * @uri /action/:action
  */
-class OxRestUtils extends OxRestBase 
+class OxRestUtils extends OxRestBase
 {
 
     /**
@@ -78,14 +78,15 @@ class OxRestUtils extends OxRestBase
     
     /**
      * Checklogin method
-     * Doesn't do anything since our dispatcher does the 
+     * Doesn't do anything since our dispatcher does the
      * hard work when checking the access to the service :)
      * @see OxRestBase::setup()
      * @return bool
      */
-    protected function _checkLogin() {
+    protected function _checkLogin()
+    {
         $oSession = oxRegistry::getSession();
-        if(!$oSession->getUser()) {
+        if (!$oSession->getUser()) {
             $this->_doLog("No valid user!");
             return array("status" => "ERROR", "sid" => null);
         }
@@ -94,12 +95,13 @@ class OxRestUtils extends OxRestBase
     }
     /**
      * Login method
-     * Doesn't do much since our dispatcher does the 
+     * Doesn't do much since our dispatcher does the
      * hard work when checking the access to the service :)
      * @see OxRestBase::setup()
      * @return bool
      */
-    protected function _doLogin() {
+    protected function _doLogin()
+    {
         $oSession = oxRegistry::getSession();
                 
         return array("status" => "OK", "sid" => $oSession->getId());
@@ -108,14 +110,13 @@ class OxRestUtils extends OxRestBase
      * Logout method
      * @return bool
      */
-    protected function _doLogout() {
-        $oUser = oxNew( 'oxuser' );
+    protected function _doLogout()
+    {
+        $oUser = oxNew('oxuser');
 
-        if ( $oUser->logout() ) {
+        if ($oUser->logout()) {
             return true;
         }
         return false;
     }
 }
-
-?>

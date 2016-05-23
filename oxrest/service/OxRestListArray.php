@@ -17,8 +17,8 @@
  *
  * @link      http://www.shoptimax.de
  * @package   oxjson
- * @copyright (C) shoptimax GmbH 2013
- * @version 1.0.0
+ * @copyright (C) shoptimax GmbH 2013-2016
+ * @version 1.0.1
  */
 
 use Tonic\Response;
@@ -71,7 +71,7 @@ class OxRestListArray extends OxRestBase
             $sSqlCount = "SELECT COUNT(*) AS cnt FROM (" . $sSql . ") AS t1";
 
             $sOrderBy = "oxid ASC";
-            if(isset($this->orderBy)) {
+            if (isset($this->orderBy)) {
                 $sOrderBy = urldecode($this->orderBy);
             }
             $sSql .= " ORDER BY $sOrderBy";
@@ -99,7 +99,7 @@ class OxRestListArray extends OxRestBase
             foreach ($a as $idx => $aData) {
                 $aData2 = array();
                 // lowercase keys from OXID to oxid etc. for the view
-                foreach($aData as $aKey => $aVal) {
+                foreach ($aData as $aKey => $aVal) {
                     $aData2[strtolower($aKey)] = $aVal;
                 }
                 $l[$aData2['oxid']] = $aData2;
@@ -111,7 +111,7 @@ class OxRestListArray extends OxRestBase
             $ret['objectType'] = $class;
             $ret['result']     = $l;
             $ret['numCurr'] = count($l);
-            //$this->_doLog("list: " . print_r($a, true));    
+            //$this->_doLog("list: " . print_r($a, true));
             
             return new Response(200, $ret);
         } catch (Exception $ex) {
@@ -136,21 +136,21 @@ class OxRestListArray extends OxRestBase
         try {
             $ret = array();
             // check for data in request
-            if(isset($this->request->data)  && $this->request->data != ""){
+            if ($this->request->data) {
                 //$this->_doLog("CLASS: $class\nDATA: " . print_r(json_encode($this->request->data), true));
                 
                 $tableName = $this->_getTableName($class);
                 $aData = $this->request->data;
                 // use SQL for updates
-                foreach($aData as $idx => $oData) {
+                foreach ($aData as $idx => $oData) {
                     $sSql = "update {$tableName} set ";
                     // convert stdObj to array
                     $aArr = $this->_objectToArray($oData);
                     $bAddSep = false;
                     $aVals = array();
-                    foreach($aArr as $aKey => $aVal) {
-                        if($bAddSep) {
-                           $sSql .= ","; 
+                    foreach ($aArr as $aKey => $aVal) {
+                        if ($bAddSep) {
+                            $sSql .= ",";
                         }
                         $sSql .= " {$aKey}= ?";
                         $aVals[] = $aVal;
@@ -160,10 +160,10 @@ class OxRestListArray extends OxRestBase
                     $aVals[] = $aArr['oxid'];
                     //$this->_doLog($sSql . " " . print_r($aVals, true));
                     $res = $oDb->execute($sSql, $aVals);
-                    if(!$res) {
+                    if (!$res) {
                         $this->_doLog("Update error: " . mysql_error());
                     }
-                }                    
+                }
             }
             return new Response(200, $ret);
         } catch (Exception $ex) {
@@ -189,10 +189,10 @@ class OxRestListArray extends OxRestBase
         try {
             $ret = array();
             // check for data in request
-            if(isset($this->request->data)  && $this->request->data != ""){
+            if (isset($this->request->data)  && $this->request->data != "") {
                 $tableName = $this->_getTableName($class);
                 $aData = $this->request->data;
-                foreach($aData as $idx => $oData) {
+                foreach ($aData as $idx => $oData) {
                     $aVals = array();
                     $sSql = "insert into {$tableName} ( ";
                     // convert stdObj to array
@@ -201,17 +201,17 @@ class OxRestListArray extends OxRestBase
                     $bAddUpdateSep = false;
                     $sVals = "";
                     $sUpdates = "";
-                    foreach($aArr as $aKey => $aVal) {
-                        if($bAddSep) {
-                           $sSql .= ","; 
-                           $sVals .= ",";
+                    foreach ($aArr as $aKey => $aVal) {
+                        if ($bAddSep) {
+                            $sSql .= ",";
+                            $sVals .= ",";
                         }
-                        if($bAddUpdateSep) {
-                            $sUpdates .= ",";                            
+                        if ($bAddUpdateSep) {
+                            $sUpdates .= ",";
                         }
                         $sSql .= " {$aKey} ";
                         $sVals .= " ? ";
-                        if($aKey !== "oxid") {
+                        if ($aKey !== "oxid") {
                             $sUpdates .= " {$aKey}=" . $oDb->quote($aVal);
                             $bAddUpdateSep = true;
                         }
@@ -222,8 +222,7 @@ class OxRestListArray extends OxRestBase
                     $sSql .= " on duplicate key update $sUpdates";
                     //$this->_doLog("SQL: " . $sSql);
                     $res = $oDb->execute($sSql, $aVals);
-                }                    
-                
+                }
             }
             return new Response(200, $ret);
         } catch (Exception $ex) {
@@ -237,13 +236,14 @@ class OxRestListArray extends OxRestBase
      * @param string $class
      * @return string
      */
-    protected function _getTableName($class) {
+    protected function _getTableName($class)
+    {
         // check if the requested (oxList based) class exists, e.g. "oxarticleList"
-        if(class_exists($class)) {
+        if (class_exists($class)) {
             /** @var oxList $list */
             $list = oxNew($class);
             /** @var oxI18n $bo */
-            if(method_exists($list, "getBaseObject")) {
+            if (method_exists($list, "getBaseObject")) {
                 $bo = $list->getBaseObject();
                 return $bo->getViewName();
             }
