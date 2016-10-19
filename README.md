@@ -49,14 +49,48 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule .* oxrest/oxrest.php [L,QSA]
 ```
 
-just before the line
+just after the line
 ```
-RewriteCond %{REQUEST_URI} oxseo\.php$
+RewriteRule oxseo\.php$ oxseo.php?mod_rewrite_module_is=on [L]
+```
+
+So that the complete blocks reads e.g.:
+
+```
+RewriteRule oxseo\.php$ oxseo.php?mod_rewrite_module_is=on [L]
+
+# OXID|JSON start
+RewriteCond %{HTTP:Authorization} ^(.*)
+RewriteRule ^(.*) - [E=HTTP_AUTHORIZATION:%1]
+RewriteCond %{REQUEST_URI} .*oxrest.*
+RewriteCond %{REQUEST_URI} !oxrest\.php$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule .* oxrest/oxrest.php [L,QSA]
+# OXID|JSON end
+
+RewriteCond %{REQUEST_URI} !(\/admin\/|\/core\/|\/application\/|\/export\/|\/modules\/|\/out\/|\/setup\/|\/tmp\/|\/views\/)
 ```
 
 If you have problems accessing the "/app" directory for the AngularJS frontend, try to change the DirectoryIndex order
 in .htaccess to this:
+
+```
 DirectoryIndex index.html index.php
+```
+
+There is a file "htaccess_example.txt" provided for reference.
+
+## Troubleshooting
+
+There may be problems with login and logout (or other AJAX calls used in the AngularJS app) if you are getting __PHP warnings__ since they break the HTTP headers.
+In __PHP 5.6.__ e.g. there may be a warning "Automatically populating $HTTP_RAW_POST_DATA is deprecated.".
+To prevent this from happening you can either disable warnings or you can adjust your "php.ini" file and set
+
+```
+always_populate_raw_post_data=-1
+```
+
+See e.g. [here](https://github.com/piwik/piwik/issues/6465) for reference.
 
 ## Using the REST interface
 

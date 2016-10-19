@@ -18,7 +18,7 @@
  * @link      http://www.shoptimax.de
  * @package   oxjson
  * @copyright (C) shoptimax GmbH 2013-2016
- * @version 1.1.0
+ * @version 1.1.1
  */
 
 use Tonic\Response;
@@ -112,32 +112,35 @@ class OxRestObject extends OxRestBase
                         $aObject = $this->_oxObject2Array($oxObj);
 
                         // enriched data, e.g. addresses for oxuser?
-                        //$this->_doLog("aAddonData: " . print_r($aAddonData, true));
-                        foreach ($aAddonData as $objName => $objData) {
-                            $oxAddObj = oxNew($objName);
-                            // this "enriched" data comes as array, too
-                            foreach ($objData as $idx => $data) {
-                                $addOxid = $data['oxid'];
-                                // no OXID, create new object
-                                if (!isset($addOxid) || $addOxid == '') {
-                                    // create new OXID
-                                    $addOxid = oxRegistry::get('oxUtilsObject')->generateUId();
-                                    $data['oxid'] = $addOxid;
-                                    // assign new array data
-                                    $oxAddObj->assign($data);
-                                    // save object
-                                    $oxAddObj->save();
-                                } else {
-                                    if ($oxAddObj->load($addOxid)) {
-                                        // assign new array data
-                                        $oxAddObj->assign($data);
-                                        // save object
-                                        $oxAddObj->save();
+                        if ($aAddonData && is_array($aAddonData)) {
+                            foreach ($aAddonData as $objName => $objData) {
+                                $oxAddObj = oxNew($objName);
+                                // this "enriched" data comes as array, too
+                                if (is_array($objData)) {
+                                    foreach ($objData as $idx => $data) {
+                                        $addOxid = $data['oxid'];
+                                        // no OXID, create new object
+                                        if (!isset($addOxid) || $addOxid == '') {
+                                            // create new OXID
+                                            $addOxid = oxRegistry::get('oxUtilsObject')->generateUId();
+                                            $data['oxid'] = $addOxid;
+                                            // assign new array data
+                                            $oxAddObj->assign($data);
+                                            // save object
+                                            $oxAddObj->save();
+                                        } else {
+                                            if ($oxAddObj->load($addOxid)) {
+                                                // assign new array data
+                                                $oxAddObj->assign($data);
+                                                // save object
+                                                $oxAddObj->save();
+                                            }
+                                        }
+                                        // reload object
+                                        if ($oxAddObj->load($addOxid)) {
+                                            $aObject["_" . $objName][] = $this->_oxObject2Array($oxAddObj);
+                                        }
                                     }
-                                }
-                                // reload object
-                                if ($oxAddObj->load($addOxid)) {
-                                    $aObject["_" . $objName][] = $this->_oxObject2Array($oxAddObj);
                                 }
                             }
                         }

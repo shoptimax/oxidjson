@@ -1,6 +1,13 @@
 # Change Log
 This is the OXID|Json changelog.
 
+## [1.1.1] - 2016-10-19
+### Changed
+- fixed some PHP warnings concerning array etc.
+- updated README (.htaccess instructions and PHP 5.6. deprecation warnings etc.)
+- added example htaccess.txt
+- some cleanup, comments and formatting
+- tested compatibility with OXID 4.10 / 5.3
 
 ## [1.1.0] - 2015-07-27
 (c) 2015 [Proud Sourcing](http://www.proudcommerce.de/), Nuremberg, Germany

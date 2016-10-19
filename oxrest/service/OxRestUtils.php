@@ -18,7 +18,7 @@
  * @link      http://www.shoptimax.de
  * @package   oxjson
  * @copyright (C) shoptimax GmbH 2013-2016
- * @version 1.1.0
+ * @version 1.1.1
  */
 
 use Tonic\Response;

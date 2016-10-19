@@ -18,7 +18,7 @@
  * @link      http://www.shoptimax.de
  * @package   oxjson
  * @copyright (C) shoptimax GmbH 2013-2016
- * @version 1.1.0
+ * @version 1.1.1
  */
 
 use Tonic\Resource;
@@ -26,13 +26,14 @@ use Tonic\Resource;
 /**
  * Class OxRestBase
  */
-class OxRestBase extends Resource {
+class OxRestBase extends Resource
+{
 
     /**
      * @var bool Activate logging
      */
     protected $_debug = true;
-    
+
     /**
      * @var oxUser Logged in user.
      */
@@ -73,6 +74,7 @@ class OxRestBase extends Resource {
         $sPassword = $userNamePassword[1];
         try {
             if (!$oSession->isSessionStarted()) {
+                $this->_doLog("Starting session ...");
                 $oSession->start();
             }
             if ($oUser->login($sUser, $sPassword)) {
@@ -95,7 +97,7 @@ class OxRestBase extends Resource {
 
     /**
      * Is the user authorized to use OXJSON?
-     * @param oxUser $oUser
+     * @param oxUser $oUser Oxid user object
      * @return boolean
      */
     protected function hasValidLogin($oUser = null)
@@ -114,7 +116,7 @@ class OxRestBase extends Resource {
         }
         return false;
     }
-    
+
     /**
      * Is the user authorized for full access (CRUD)?
      * @return boolean
@@ -131,7 +133,7 @@ class OxRestBase extends Resource {
         }
         return false;
     }
-    
+
     /**
      * Check access rights for POST, PUT, DELETE
      * @throws Tonic\ConditionException
@@ -170,7 +172,7 @@ class OxRestBase extends Resource {
     /**
      * Convert an OXID object to an array
      * Hide some specific fields, for now password and passsalt of oxusers
-     * @param object $o
+     * @param object $o Oxid object
      * @return array
      */
     protected function _oxObject2Array($o)
@@ -197,7 +199,7 @@ class OxRestBase extends Resource {
     /**
      * Check if a certain object key is blacklisted, e.g. password fields
      *
-     * @param string $sKey
+     * @param string $sKey Object key
      * @return bool
      */
     protected function _keyIsBlacklisted($sKey)
@@ -215,7 +217,7 @@ class OxRestBase extends Resource {
 
     /**
      * Convert stdClass to array
-     * @param object $d
+     * @param object $d Oxid object
      * @return array
      */
     protected function _objectToArray($d)
@@ -231,20 +233,22 @@ class OxRestBase extends Resource {
             return array_map(array('oxRestBase','_objectToArray'), $d);
         } else {
             // return filtered array
-            foreach ($d as $k => $v) {
-                $k = strtolower($k);
-                if ($this->_keyIsBlacklisted($k)) {
-                    unset($d[$k]);
+            if (is_array($d)) {
+                foreach ($d as $k => $v) {
+                    $k = strtolower($k);
+                    if ($this->_keyIsBlacklisted($k)) {
+                        unset($d[$k]);
+                    }
                 }
             }
             return $d;
         }
     }
-    
+
     /**
      * General logging function
-     * @param string $msg
-     * @param string $filename
+     * @param string $msg      The log message
+     * @param string $filename The log filename
      */
     protected function _doLog($msg, $filename = "rest.log")
     {
