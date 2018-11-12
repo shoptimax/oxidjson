@@ -1,5 +1,11 @@
 # OXID|Json #
 
+## OXID REST API for OXID 6
+
+Update 11/18: https://docs.oxid-projects.com/oxid-rest-api/
+
+---
+
 ## What is it? ##
 OXID|Json is a REST / JSON CRUD (Create, Read, Update, Delete) interface for the [OXID eShop](http://www.oxid-esales.com)
 that comes with a fancy [AngularJS](http://angularjs.org) frontend for playing around with the JSON data. It uses the [Tonic PHP framework](http://www.peej.co.uk/tonic/).
