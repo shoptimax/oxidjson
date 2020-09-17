@@ -91,9 +91,9 @@ class OxRestList extends OxRestBase
             $iLimitOffset = $iPerPage * $iCurPage;
 
             $sSql = $sSql . " LIMIT $iLimitOffset,$iPerPage";
-            
+
             //$this->_doLog($sSql);
-            
+
             $l = array();
             $list->selectString(
                 $sSql
@@ -101,7 +101,7 @@ class OxRestList extends OxRestBase
             foreach ($list->getArray() as $oxid => $oxObject) {
                 $l[$oxid] = $this->_oxObject2Array($oxObject);
             }
-            
+
             $ret['numPages']   = $iNumPages;
             $ret['curPage']    = $iCurPage;
             $ret['numObjects'] = $cnt;
@@ -109,7 +109,7 @@ class OxRestList extends OxRestBase
             $ret['result']     = $l;
             $ret['numCurr'] = count($l);
             //$this->_doLog("list: " . print_r($l, true));
-            
+
             return new Response(200, $ret);
         } catch (Exception $ex) {
             $this->_doLog("Error getting list: " . $ex->getMessage());
@@ -117,7 +117,7 @@ class OxRestList extends OxRestBase
 
         return new Response(404, "No data");
     }
-    
+
     /**
      * Saving list data back to DB
      * @method PUT
@@ -134,7 +134,7 @@ class OxRestList extends OxRestBase
             // check for data in request
             if ($this->request->data && $this->request->data != "") {
                 $this->_doLog("CLASS: $class\nDATA: " . print_r(json_encode($this->request->data), true));
-                
+
                 /** @var oxList $list */
                 $list = oxNew($class);
                 $bo = $list->getBaseObject();
@@ -187,7 +187,7 @@ class OxRestList extends OxRestBase
                     $oxObj = clone $bo;
                     if (!isset($sOxid) || $sOxid == '') {
                         // create new OXID
-                        $sOxid = oxRegistry::get('oxUtilsObject')->generateUId();
+                        $sOxid = \OxidEsales\Eshop\Core\Registry::getUtilsObject()->generateUID();
                         $aObjData['oxid'] = $sOxid;
                     } else {
                         // object id must be new!

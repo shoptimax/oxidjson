@@ -74,7 +74,7 @@ class OxRestObject extends OxRestBase
 
         return new Response(404, "Not found");
     }
-    
+
     /**
      * Saving object data back to DB
      * @method PUT
@@ -122,7 +122,7 @@ class OxRestObject extends OxRestBase
                                         // no OXID, create new object
                                         if (!isset($addOxid) || $addOxid == '') {
                                             // create new OXID
-                                            $addOxid = oxRegistry::get('oxUtilsObject')->generateUId();
+                                            $addOxid = \OxidEsales\Eshop\Core\Registry::getUtilsObject()->generateUID();
                                             $data['oxid'] = $addOxid;
                                             // assign new array data
                                             $oxAddObj->assign($data);
@@ -184,7 +184,7 @@ class OxRestObject extends OxRestBase
                 $oxObj = oxNew($class);
                 if (!isset($sOxid) || $sOxid == '') {
                     // create new OXID
-                    $sOxid = oxRegistry('oxUtilsObject')->generateUId();
+                    $sOxid = \OxidEsales\Eshop\Core\Registry::getUtilsObject()->generateUID();
                     $aObjData['oxid'] = $sOxid;
                 } else {
                     // object id must be new!
@@ -209,7 +209,7 @@ class OxRestObject extends OxRestBase
                             // no OXID, create new object
                             if (!isset($addOxid) || $addOxid == '') {
                                 // create new OXID
-                                $addOxid = oxRegistry::get('oxUtilsObject')->generateUId();
+                                $addOxid = \OxidEsales\Eshop\Core\Registry::getUtilsObject()->generateUID();
                                 $data['oxid'] = $addOxid;
                                 // assign new array data
                                 $oxAddObj->assign($data);
@@ -237,7 +237,7 @@ class OxRestObject extends OxRestBase
         }
         return new Response(500);
     }
-    
+
     /**
      * @method DELETE
      * @json
