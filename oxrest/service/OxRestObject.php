@@ -66,7 +66,15 @@ class OxRestObject extends OxRestBase
                         $aObject['_oxaddress'] = $aAddresses;
                         break;
                 }
-                return new Response(200, $aObject);
+                $jsonEncode = json_encode($aObject);
+
+                if(false === $jsonEncode) {
+
+                    $jsonErrormsg = json_last_error_msg();
+                    return new Response(404, "jsonErrormsg: ". $jsonErrormsg);
+                }
+
+                return new Response(200, $jsonEncode, array('content-type' => 'application/json'));
             }
         } catch (Exception $ex) {
 
@@ -74,11 +82,12 @@ class OxRestObject extends OxRestBase
 
         return new Response(404, "Not found");
     }
-    
+
     /**
      * Saving object data back to DB
      * @method PUT
      * @json
+     * @provides application/json
      * @hasRwAccessRights
      * @param string $class
      * @priority 3
@@ -91,8 +100,14 @@ class OxRestObject extends OxRestBase
             if ($this->request->data && $this->request->data != "") {
                 $aAddonData = null;
                 $aData = $this->request->data;
+
+                if (false == is_array($aData)) {
+                    $aData = json_decode($aData);
+                }
+
                 // convert stdObj to array
                 $aObjData = $this->_objectToArray($aData);
+
                 foreach ($aObjData as $k => $v) {
                     if (substr($k, 0, 1) === "_") {
                         $aAddonData[substr($k, 1)] = $v;
@@ -122,7 +137,7 @@ class OxRestObject extends OxRestBase
                                         // no OXID, create new object
                                         if (!isset($addOxid) || $addOxid == '') {
                                             // create new OXID
-                                            $addOxid = oxRegistry::get('oxUtilsObject')->generateUId();
+                                            $addOxid = \OxidEsales\Eshop\Core\Registry::getUtilsObject()->generateUID();
                                             $data['oxid'] = $addOxid;
                                             // assign new array data
                                             $oxAddObj->assign($data);
@@ -145,14 +160,22 @@ class OxRestObject extends OxRestBase
                             }
                         }
 
-                        return new Response(200, $aObject);
+                        $jsonEncode = json_encode($aObject);
+
+                        if(false === $jsonEncode) {
+
+                            $jsonErrormsg = json_last_error_msg();
+                            return new Response(404, "jsonErrormsg: ". $jsonErrormsg);
+                        }
+
+                        return new Response(200, $jsonEncode, array('content-type' => 'application/json'));
                     }
                 }
             }
         } catch (Exception $ex) {
             $this->_doLog("Error saving object: " . $ex->getMessage());
         }
-        return new Response(500);
+        return new Response(500, (__METHOD__." ".__LINE__."<br>".PHP_EOL));
     }
 
     /**
@@ -171,6 +194,11 @@ class OxRestObject extends OxRestBase
             if ($this->request->data && $this->request->data != "") {
                 $aAddonData = null;
                 $aData = $this->request->data;
+
+                if (false == is_array($aData)) {
+                    $aData = json_decode($aData);
+                }
+
                 // convert stdObj to array
                 $aObjData = $this->_objectToArray($aData);
                 foreach ($aObjData as $k => $v) {
@@ -184,7 +212,7 @@ class OxRestObject extends OxRestBase
                 $oxObj = oxNew($class);
                 if (!isset($sOxid) || $sOxid == '') {
                     // create new OXID
-                    $sOxid = oxRegistry('oxUtilsObject')->generateUId();
+                    $sOxid = \OxidEsales\Eshop\Core\Registry::getUtilsObject()->generateUID();
                     $aObjData['oxid'] = $sOxid;
                 } else {
                     // object id must be new!
@@ -209,7 +237,7 @@ class OxRestObject extends OxRestBase
                             // no OXID, create new object
                             if (!isset($addOxid) || $addOxid == '') {
                                 // create new OXID
-                                $addOxid = oxRegistry::get('oxUtilsObject')->generateUId();
+                                $addOxid = \OxidEsales\Eshop\Core\Registry::getUtilsObject()->generateUID();
                                 $data['oxid'] = $addOxid;
                                 // assign new array data
                                 $oxAddObj->assign($data);
@@ -229,15 +257,23 @@ class OxRestObject extends OxRestBase
                             }
                         }
                     }
-                    return new Response(200, $aObject);
+                    $jsonEncode = json_encode($aObject);
+
+                    if(false === $jsonEncode) {
+
+                        $jsonErrormsg = json_last_error_msg();
+                        return new Response(404, "jsonErrormsg: ". $jsonErrormsg);
+                    }
+
+                    return new Response(200, $jsonEncode, array('content-type' => 'application/json'));
                 }
             }
         } catch (Exception $ex) {
             $this->_doLog("Error saving new object: " . $ex->getMessage());
         }
-        return new Response(500);
+        return new Response(500, (__METHOD__." ".__LINE__."<br>".PHP_EOL));
     }
-    
+
     /**
      * @method DELETE
      * @json

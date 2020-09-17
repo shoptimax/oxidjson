@@ -31,7 +31,7 @@ if(file_exists(__DIR__ . '/../bootstrap.php')) {
 else {
     // for older shops before 4.7., do some custom OXID bootstrapping
     // and also include oxRegistry
-    include __DIR__ . '/bootstrap_oxid.php';    
+    include __DIR__ . '/bootstrap_oxid.php';
 }
 
 $config = array(
@@ -47,8 +47,10 @@ $result = preg_replace('/.*oxrest(.*)/x', '\1', $uri);
 $request = new Tonic\Request(array('uri' => $result));
 
 try {
+    /** @var OxRestBase $resource */
     $resource = $app->getResource($request);
     $response = $resource->exec();
+
 } catch (Tonic\NotFoundException $e) {
     $response = new Tonic\Response(404, $e->getMessage());
 } catch (Tonic\UnauthorizedException $e) {
@@ -56,5 +58,4 @@ try {
 } catch (Tonic\Exception $e) {
     $response = new Tonic\Response($e->getCode(), $e->getMessage());
 }
-
 $response->output();
